@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Armani's Collections - Porsche 911</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #header {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2em;
+            color: #fff;
+            background: linear-gradient(to right, #111, #444);
+            padding: 30px 0;
+            z-index: 10;
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+            border-bottom: 3px solid #555;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(#ffffff, #9c9c9c, #ffffff); /* Gray gradient backdrop */
+            position: relative;
+            top: 100px;
+            display: flex;
+        }
+
+        #specs-panel {
+            width: 300px;
+            background: linear-gradient(to bottom right, #444, #222);
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            font-size: 1em;
+            font-family: 'Poppins', sans-serif;
+            border-radius: 8px;
+            margin: 10px;
+        }
+
+        #specs-panel h2 {
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #fff;
+            padding-bottom: 10px;
+            letter-spacing: 0.05em;
+        }
+
+        /* Dropdown button styling */
+        .dropdown {
+            width: 100%;
+            background-color: black;
+            color: white;
+            padding: 15px;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .dropdown:hover {
+            background-color: #444;
+        }
+
+        .dropdown-content {
+            display: none;
+            background-color: #333;
+            padding: 10px;
+            color: white;
+            font-size: 1.1em;
+        }
+
+        .dropdown-content.active {
+            display: block;
+        }
+
+        #car-viewer {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            height: 100%; /* Ensure full height */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            #header {
+                font-size: 1.8em;
+            }
+            #specs-panel {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #header {
+                font-size: 1.5em;
+            }
+            #specs-panel {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="header">Armani's Collections - Porsche 911</div>
+
+    <div id="container">
+        <!-- Side panel for car specs -->
+        <div id="specs-panel">
+            <h2>Porsche 911 - Specifications</h2>
+            
+            <!-- Dropdown buttons -->
+            <button class="dropdown" data-tab="engine">Engine</button>
+            <div class="dropdown-content" id="engine">
+                <p><strong>Engine:</strong> 3.0L twin-turbo flat-six</p>
+            </div>
+
+            <button class="dropdown" data-tab="horsepower">Horsepower</button>
+            <div class="dropdown-content" id="horsepower">
+                <p><strong>Horsepower:</strong> 379 hp</p>
+            </div>
+
+            <button class="dropdown" data-tab="speed">0-60 mph</button>
+            <div class="dropdown-content" id="speed">
+                <p><strong>0-60 mph:</strong> 4.0 seconds</p>
+            </div>
+
+            <button class="dropdown" data-tab="top-speed">Top Speed</button>
+            <div class="dropdown-content" id="top-speed">
+                <p><strong>Top Speed:</strong> 182 mph</p>
+            </div>
+
+            <button class="dropdown" data-tab="transmission">Transmission</button>
+            <div class="dropdown-content" id="transmission">
+                <p><strong>Transmission:</strong> 8-speed automatic</p>
+            </div>
+        </div>
+
+        <!-- Car viewer container -->
+        <div id="car-viewer">
+            <!-- Placeholder for car viewer -->
+        </div>
+    </div>
+
+    <!-- Include Three.js from CDN with versioning -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js?v=1.0"></script>
+    <!-- Include GLTFLoader for loading GLB models with versioning -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js?v=1.0"></script>
+    <!-- Include OrbitControls for interaction with versioning -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js?v=1.0"></script>
+    <!-- Include RGBELoader for HDRI environment map with versioning -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js?v=1.0"></script>
+    <!-- Include EffectComposer and post-processing passes with versioning -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js?v=1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js?v=1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js?v=1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js?v=1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/GammaCorrectionShader.js?v=1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js?v=1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js?v=1.0"></script>
+
+    <script>
+        // Create scene
+        var scene = new THREE.Scene();
+
+        // Set up camera
+        var camera = new THREE.PerspectiveCamera(20, (window.innerWidth - 300) / window.innerHeight, 0.1, 1000); // Exclude side panel width
+        camera.position.set(0, 2, 10);
+
+        // Set up renderer with transparent background
+        var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth - 300, window.innerHeight); // Adjust to exclude side panel width
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 0.8;
+        document.getElementById('car-viewer').appendChild(renderer.domElement);
+
+        // Add orbit controls
+        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+
+        // Add ambient light
+        var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        // Add directional light
+        var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+
+        // Load HDRI environment map for reflections and lighting only (not for background)
+        new THREE.RGBELoader()
+            .setDataType(THREE.UnsignedByteType)
+            .load('1.hdr', function (texture) {
+                texture.mapping = THREE.EquirectangularReflectionMapping;
+                scene.environment = texture; // Only affects reflections and lighting
+            });
+
+        // Set up post-processing
+        var composer = new THREE.EffectComposer(renderer);
+        var renderPass = new THREE.RenderPass(scene, camera);
+        composer.addPass(renderPass);
+
+        var bloomPass = new THREE.UnrealBloomPass(
+            new THREE.Vector2(window.innerWidth, window.innerHeight),
+            0.1, // Bloom strength
+            0.4, // Bloom radius
+            1.0  // Bloom threshold
+        );
+        composer.addPass(bloomPass);
+
+        var gammaCorrectionPass = new THREE.ShaderPass(THREE.GammaCorrectionShader);
+        composer.addPass(gammaCorrectionPass);
+
+        // Function to load car models and place them in the center
+        function loadCarModel(filePath) {
+            var loader = new THREE.GLTFLoader();
+            loader.load(filePath + '?v=1.0', function (gltf) {
+                var car = gltf.scene;
+                car.scale.set(1, 1, 1);
+                car.position.set(0, 0, 0);
+                scene.add(car);
+
+                // Rotate the car slowly
+                function rotateCar() {
+                    car.rotation.y += 0.01; // Adjust rotation speed here
+                }
+
+                // Animation loop
+                function animate() {
+                    requestAnimationFrame(animate);
+                    rotateCar();
+                    controls.update();
+                    composer.render();
+                }
+                animate();
+            }, undefined, function(error) {
+                console.error('Error loading model:', error);
+            });
+        }
+
+        // Load the car model
+        loadCarModel('l.glb');
+
+        // Handle window resize
+        window.addEventListener('resize', function () {
+            var width = window.innerWidth - 300; // Adjust for side panel
+            var height = window.innerHeight;
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+            composer.setSize(width, height);
+        });
+
+        // JavaScript to handle dropdown interaction
+        const dropdowns = document.querySelectorAll('.dropdown');
+        dropdowns.forEach(dropdown => {
+            dropdown.addEventListener('click', function () {
+                const content = document.getElementById(dropdown.dataset.tab);
+                content.classList.toggle('active'); // Toggle dropdown content visibility
+            });
+        });
+    </script>
+</body>
+</html>
